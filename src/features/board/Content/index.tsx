@@ -1,5 +1,6 @@
 import styles from './styles.module.css'
 import usePosts from '../hooks/usePosts'
+import { Link } from 'react-router-dom'
 
 const Content = () => {
   const { posts, loading, error } = usePosts()
@@ -12,8 +13,10 @@ const Content = () => {
     <div className={styles.list}>
       {posts.map((p) => (
         <article key={p.id} className={styles.card}>
-          <h3 className={styles.title}>{p.title}</h3>
-          <p className={styles.excerpt}>{p.excerpt}</p>
+          <Link to={`/posts/${p.id}`} className={styles.link}>
+            <h3 className={styles.title}>{p.title}</h3>
+            <p className={styles.excerpt}>{p.excerpt}</p>
+          </Link>
         </article>
       ))}
     </div>

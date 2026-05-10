@@ -1,7 +1,8 @@
 export interface Post {
-  id: number
+  id: string
   title: string
-  excerpt?: string
+  description?: string
+  userId?: string
   [key: string]: any
 }
 
