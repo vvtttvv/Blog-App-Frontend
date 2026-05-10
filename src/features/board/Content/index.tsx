@@ -1,12 +1,13 @@
 import styles from './styles.module.css'
-
-const posts = [
-  { id: 1, title: 'First post', excerpt: 'This is the first post excerpt.' },
-  { id: 2, title: 'Another post', excerpt: 'Short summary of the second post.' },
-  { id: 3, title: 'Third post', excerpt: 'Notes and thoughts.' },
-]
+import usePosts from '../hooks/usePosts'
 
 const Content = () => {
+  const { posts, loading, error } = usePosts()
+
+  if (loading) return <div className={styles.list}>Loading posts…</div>
+  if (error) return <div className={styles.list}>Error: {error}</div>
+  if (!posts || posts.length === 0) return <div className={styles.list}>No posts.</div>
+
   return (
     <div className={styles.list}>
       {posts.map((p) => (
