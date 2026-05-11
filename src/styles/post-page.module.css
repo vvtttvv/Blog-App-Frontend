@@ -28,6 +28,38 @@
   gap: 12px;
 }
 
+.commentToolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.commentActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.commentButton,
+.replyButton,
+.cancelButton,
+.submitButton {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.submitButton {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
 .commentCard {
   padding: 14px 16px;
   border: 1px solid var(--border);
@@ -51,6 +83,12 @@
   font-weight: 600;
 }
 
+.commentReplyMeta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
 .commentBody {
   margin: 0;
   color: var(--text);
@@ -67,7 +105,57 @@
   margin-top: 12px;
 }
 
-.goback{
+.goback {
   color: var(--text);
   text-decoration: underline;
+}
+
+.commentForm {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.commentFormTitle {
+  margin: 0;
+  font-size: 18px;
+}
+
+.commentField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.commentInput,
+.commentTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.commentTextarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.commentFormActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.commentError {
+  color: #ef4444;
+  font-size: 14px;
 }

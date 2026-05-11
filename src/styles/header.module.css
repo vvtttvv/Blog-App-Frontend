@@ -22,15 +22,98 @@
   align-items: center;
 }
 
+.primaryButton,
+.secondaryButton,
 .themeBtn {
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--surface);
   color: var(--text);
   cursor: pointer;
 }
 
+.primaryButton {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.themeBtn {
+  background: transparent;
+}
+
 .authPlaceholder {
   color: var(--muted);
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.modal {
+  width: min(640px, 100%);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+}
+
+.modalTitle {
+  margin: 0 0 16px 0;
+  font-size: 22px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
 }
