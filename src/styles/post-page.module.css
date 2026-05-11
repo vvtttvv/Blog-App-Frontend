@@ -35,9 +35,20 @@
   background: var(--surface);
 }
 
+.commentAuthorLink {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 6px;
+  transition: color 0.2s;
+}
+
+.commentAuthorLink:hover {
+  color: var(--muted);
+}
+
 .commentAuthor {
   font-weight: 600;
-  margin-bottom: 6px;
 }
 
 .commentBody {
@@ -47,4 +58,16 @@
 
 .meta {
   color: var(--muted);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.goback{
+  color: var(--text);
+  text-decoration: underline;
 }

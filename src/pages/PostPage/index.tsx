@@ -14,10 +14,16 @@ export default function PostPage() {
 
 	return (
 		<div className={styles.root}>
-			<Link to="/">← Back</Link>
-			<h1 className={styles.title}>{post.title}</h1>
-			<p className={styles.meta}>{post.createdAt}</p>
-			<div className={styles.body}>{post.description || post.content || ''}</div>
+			<Link className={styles.goback} to="/">
+				Go Back
+			</Link>
+            <div className={styles.header}>
+                <h1 className={styles.title}>{post.title}</h1>
+                <p className={styles.meta}>
+                    {new Date(post.createdAt).toLocaleDateString('ru-RU')}
+                </p>
+            </div>
+            <div className={styles.body}>{post.description || ''}</div>
 
 			<section className={styles.commentsSection}>
 				<h2 className={styles.commentsTitle}>Comments</h2>
@@ -29,7 +35,12 @@ export default function PostPage() {
 				<div className={styles.commentsList}>
 					{comments.map((comment) => (
 						<article key={comment.id} className={styles.commentCard}>
-							<div className={styles.commentAuthor}>{comment.userName || 'Anonymous'}</div>
+							<Link
+								to={`/users/${comment.userId}`}
+								className={styles.commentAuthorLink}
+							>
+								<div className={styles.commentAuthor}>{comment.userName || 'Anonymous'}</div>
+							</Link>
 							<p className={styles.commentBody}>{comment.description || ''}</p>
 						</article>
 					))}
