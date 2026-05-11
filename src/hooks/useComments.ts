@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { fetchComments } from '../api/fetchComments'
-import type { Comment } from '../types'
+import { fetchComments } from '../services/fetchComments'
+import type { Comment } from '../types/commentType'
 
 export default function useComments(postId?: string) {
   const [comments, setComments] = useState<Comment[]>([])

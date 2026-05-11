@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const useHeader = () => {
+export default function useHeader() {
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
     return localStorage.getItem('theme') === 'dark'
@@ -13,9 +13,7 @@ const useHeader = () => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
   }, [isDark])
 
-  const toggle = () => setIsDark((v) => !v)
+  const toggle = () => setIsDark((value) => !value)
 
   return { isDark, toggle }
 }
-
-export default useHeader

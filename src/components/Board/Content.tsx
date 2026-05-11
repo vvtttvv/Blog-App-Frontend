@@ -1,8 +1,8 @@
-import styles from './styles.module.css'
-import usePosts from '../hooks/usePosts'
 import { Link } from 'react-router-dom'
+import styles from '../../styles/board.module.css'
+import usePosts from '../../hooks/usePosts'
 
-const Content = () => {
+export default function Content() {
   const { posts, loading, error } = usePosts()
 
   if (loading) return <div className={styles.list}>Loading posts…</div>
@@ -11,16 +11,14 @@ const Content = () => {
 
   return (
     <div className={styles.list}>
-      {posts.map((p) => (
-        <article key={p.id} className={styles.card}>
-          <Link to={`/posts/${p.id}`} className={styles.link}>
-            <h3 className={styles.title}>{p.title}</h3>
-            <p className={styles.excerpt}>{p.excerpt}</p>
+      {posts.map((post) => (
+        <article key={post.id} className={styles.card}>
+          <Link to={`/posts/${post.id}`} className={styles.link}>
+            <h3 className={styles.title}>{post.title}</h3>
+            <p className={styles.excerpt}>{post.excerpt}</p>
           </Link>
         </article>
       ))}
     </div>
   )
 }
-
-export default Content

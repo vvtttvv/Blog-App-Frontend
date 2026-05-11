@@ -1,6 +1,6 @@
-import styles from './styles.module.css'
+import styles from '../../styles/board.module.css'
 
-const Filters = () => {
+export default function Filters() {
   return (
     <div className={styles.filters}>
       <input className={styles.input} placeholder="Search posts..." />
@@ -12,5 +12,3 @@ const Filters = () => {
     </div>
   )
 }
-
-export default Filters

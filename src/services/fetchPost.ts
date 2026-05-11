@@ -1,4 +1,4 @@
-import type { Post } from '../types'
+import type { Post } from "../types/postType"
 
 function normalizePostResponse(data: unknown): Post | null {
   if (!data) return null

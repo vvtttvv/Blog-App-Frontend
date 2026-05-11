@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Layout from './Layout'
-import Board from '../features/board'
-import PostPage from '../pages/PostPage'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout'
+import Board from './components/Board'
+import PostPage from './pages/PostPage'
 
-export default function AppRoutes() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>

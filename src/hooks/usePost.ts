@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { fetchPost } from '../api/fetchPost'
-import type { Post } from '../types'
+import { fetchPost } from '../services/fetchPost'
+import type { Post } from '../types/postType'
 
 export default function usePost(id?: string) {
   const [post, setPost] = useState<Post | null>(null)

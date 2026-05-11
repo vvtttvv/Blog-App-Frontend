@@ -14,7 +14,9 @@
   --border: #1f2a36;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -27,6 +29,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.app-root { min-height: 100vh; display: flex; flex-direction: column }
-.app-main { flex: 1; padding: 24px }
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
+.app-main {
+  flex: 1;
+  padding: 24px;
+}

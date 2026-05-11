@@ -1,8 +1,9 @@
-import styles from './styles.module.css'
-import useHeader from './hooks/useHeader'
+import styles from '../../styles/header.module.css'
+import useHeader from '../../hooks/useHeader'
 
-const Header = () => {
+export default function Header() {
   const { isDark, toggle } = useHeader()
+
   return (
     <header className={styles.header}>
       <div className={styles.brand}>My Blog</div>
@@ -16,5 +17,3 @@ const Header = () => {
     </header>
   )
 }
-
-export default Header

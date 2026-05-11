@@ -6,12 +6,22 @@
   background: var(--surface);
   color: var(--text);
 }
+
 .brand {
   font-weight: 600;
   font-size: 18px;
 }
-.spacer { flex: 1 }
-.controls { display: flex; gap: 12px; align-items: center }
+
+.spacer {
+  flex: 1;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .themeBtn {
   padding: 6px 10px;
   border-radius: 6px;
@@ -20,6 +30,7 @@
   color: var(--text);
   cursor: pointer;
 }
+
 .authPlaceholder {
   color: var(--muted);
 }

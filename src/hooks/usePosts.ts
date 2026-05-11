@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react'
-import { fetchPosts } from '../fetchPosts'
-import type { Post } from '../fetchPosts'
+import { useCallback, useEffect, useState } from 'react'
+import { fetchPosts } from '../services/fetchPosts'
+import type { Post } from '../types/postType'
 
 export default function usePosts() {
   const [posts, setPosts] = useState<Post[] | null>(null)
