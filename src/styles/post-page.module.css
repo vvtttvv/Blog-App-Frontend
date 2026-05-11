@@ -54,6 +54,19 @@
   cursor: pointer;
 }
 
+.deleteButton {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
 .submitButton {
   background: var(--text);
   color: var(--bg);
@@ -92,6 +105,12 @@
 .commentBody {
   margin: 0;
   color: var(--text);
+}
+
+.commentEditInline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .meta {

@@ -1,15 +1,26 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import styles from '../../styles/post-page.module.css'
 import usePost from '../../hooks/usePost'
 import useComments from '../../hooks/useComments'
 import { createComment } from '../../services/createComment'
 import { CURRENT_USER_ID } from '../../constants/currentUser'
+import { updatePost } from '../../services/updatePost'
+import { deletePost } from '../../services/deletePost'
+import { updateComment as apiUpdateComment } from '../../services/updateComment'
+import { deleteComment as apiDeleteComment } from '../../services/deleteComment'
+import PostHeader from './ui/PostHeader'
+import CommentForm from './ui/CommentForm'
+import EditPostForm from './ui/EditPostForm'
+import CommentItem from './ui/CommentItem'
+import type { Comment } from '../../types/commentType'
 
 export default function PostPage() {
 	const { id } = useParams()
-	const { post, loading, error } = usePost(id)
+	const navigate = useNavigate()
+	const { post, loading, error, refreshPost } = usePost(id)
 	const { comments, loading: commentsLoading, error: commentsError, refreshComments } = useComments(id)
+
 	const [isCommentFormOpen, setIsCommentFormOpen] = useState(false)
 	const [commentText, setCommentText] = useState('')
 	const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null)
@@ -17,10 +28,27 @@ export default function PostPage() {
 	const [commentError, setCommentError] = useState<string | null>(null)
 	const [submittingComment, setSubmittingComment] = useState(false)
 
+	const [isEditPostOpen, setIsEditPostOpen] = useState(false)
+	const [editPostTitle, setEditPostTitle] = useState('')
+	const [editPostDescription, setEditPostDescription] = useState('')
+	const [editingCommentId, setEditingCommentId] = useState<string | null>(null)
+	const [editingCommentText, setEditingCommentText] = useState('')
+
 	const selectedParentComment = useMemo(
-		() => comments.find((comment) => comment.id === replyToCommentId) ?? null,
+		() => comments.find((c) => c.id === replyToCommentId) ?? null,
 		[comments, replyToCommentId],
 	)
+
+	const canEditPost = post?.userId === CURRENT_USER_ID
+	const commentFormTitle = replyToCommentId ? 'Reply to comment' : 'Add comment'
+
+	const resetCommentForm = () => {
+		setIsCommentFormOpen(false)
+		setReplyToCommentId(null)
+		setReplyToUserName(null)
+		setCommentText('')
+		setCommentError(null)
+	}
 
 	const openCommentForm = () => {
 		setIsCommentFormOpen(true)
@@ -37,7 +65,6 @@ export default function PostPage() {
 	const handleCommentSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		if (!id) return
-
 		setSubmittingComment(true)
 		setCommentError(null)
 
@@ -55,11 +82,71 @@ export default function PostPage() {
 			return
 		}
 
-		setCommentText('')
-		setReplyToCommentId(null)
-		setReplyToUserName(null)
-		setIsCommentFormOpen(false)
+		resetCommentForm()
 		await refreshComments()
+	}
+
+	const openEditPost = () => {
+		setEditPostTitle(post?.title ?? '')
+		setEditPostDescription(post?.description ?? '')
+		setIsEditPostOpen(true)
+	}
+
+	const handlePostUpdate = async (event: React.SyntheticEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		if (!post?.id) return
+		const updated = await updatePost(post.id, {
+			title: editPostTitle,
+			description: editPostDescription,
+			userId: CURRENT_USER_ID,
+		})
+		if (!updated) {
+			alert('Failed to update post')
+			return
+		}
+		setIsEditPostOpen(false)
+		await refreshPost()
+	}
+
+	const handlePostDelete = async () => {
+		if (!post?.id) return
+		if (!confirm('Delete this post?')) return
+		const ok = await deletePost(post.id, CURRENT_USER_ID)
+		if (ok) navigate('/')
+		else alert('Failed to delete post')
+	}
+
+	const startEditComment = (commentId: string, text: string) => {
+		setEditingCommentId(commentId)
+		setEditingCommentText(text)
+	}
+
+	const cancelEditComment = () => {
+		setEditingCommentId(null)
+		setEditingCommentText('')
+	}
+
+	const saveEditComment = async (comment: Comment) => {
+		const updated = await apiUpdateComment(comment.id, {
+			description: editingCommentText,
+			userId: CURRENT_USER_ID,
+			postId: comment.postId,
+			parentId: comment.parentId ?? null,
+		})
+		if (updated) {
+			setEditingCommentId(null)
+			setEditingCommentText('')
+			await refreshComments()
+		} else {
+			alert('Failed to update comment')
+		}
+	}
+
+	const handleDeleteComment = async (commentId: string) => {
+		if (!confirm('Delete this comment?')) return
+		const ok = await apiDeleteComment(commentId)
+		if (ok) await refreshComments()
+		else alert('Failed to delete comment')
 	}
 
 	if (loading) return <div className={styles.root}>Loading…</div>
@@ -71,12 +158,13 @@ export default function PostPage() {
 			<Link className={styles.goback} to="/">
 				Go Back
 			</Link>
-			<div className={styles.header}>
-				<h1 className={styles.title}>{post.title}</h1>
-				<p className={styles.meta}>
-					{new Date(post.createdAt).toLocaleDateString('ru-RU')}
-				</p>
-			</div>
+			<PostHeader
+				title={post.title}
+				createdAt={post.createdAt}
+				canEdit={canEditPost}
+				onEdit={openEditPost}
+				onDelete={handlePostDelete}
+			/>
 			<div className={styles.body}>{post.description || ''}</div>
 
 			<div className={styles.commentToolbar}>
@@ -91,42 +179,26 @@ export default function PostPage() {
 				)}
 			</div>
 
-			{isCommentFormOpen && (
-				<form className={styles.commentForm} onSubmit={handleCommentSubmit}>
-					<h3 className={styles.commentFormTitle}>
-						{replyToCommentId ? 'Reply to comment' : 'Add comment'}
-					</h3>
-					<label className={styles.commentField}>
-						<span className={styles.meta}>Comment text</span>
-						<textarea
-							className={styles.commentTextarea}
-							value={commentText}
-							onChange={(event) => setCommentText(event.target.value)}
-							required
-						/>
-					</label>
-					{commentError && <div className={styles.commentError}>{commentError}</div>}
-					<div className={styles.commentFormActions}>
-						<button
-							type="button"
-							className={styles.cancelButton}
-							onClick={() => {
-								setIsCommentFormOpen(false)
-								setReplyToCommentId(null)
-								setReplyToUserName(null)
-								setCommentText('')
-								setCommentError(null)
-							}}
-							disabled={submittingComment}
-						>
-							Cancel
-						</button>
-						<button type="submit" className={styles.submitButton} disabled={submittingComment}>
-							{submittingComment ? 'Sending...' : 'Send'}
-						</button>
-					</div>
-				</form>
-			)}
+			<CommentForm
+				isOpen={isCommentFormOpen}
+				title={commentFormTitle}
+				value={commentText}
+				error={commentError}
+				submitting={submittingComment}
+				onChange={setCommentText}
+				onSubmit={handleCommentSubmit}
+				onCancel={resetCommentForm}
+			/>
+
+			<EditPostForm
+				isOpen={isEditPostOpen}
+				title={editPostTitle}
+				description={editPostDescription}
+				onTitleChange={setEditPostTitle}
+				onDescriptionChange={setEditPostDescription}
+				onSubmit={handlePostUpdate}
+				onCancel={() => setIsEditPostOpen(false)}
+			/>
 
 			<section className={styles.commentsSection}>
 				<h2 className={styles.commentsTitle}>Comments</h2>
@@ -137,26 +209,19 @@ export default function PostPage() {
 				)}
 				<div className={styles.commentsList}>
 					{comments.map((comment) => (
-						<article key={comment.id} className={styles.commentCard}>
-							<Link to={`/users/${comment.userId}`} className={styles.commentAuthorLink}>
-								<div className={styles.commentAuthor}>{comment.userName || 'Anonymous'}</div>
-							</Link>
-							{comment.parentId && (
-								<div className={styles.commentReplyMeta}>
-									Reply to comment #{comment.parentId}
-								</div>
-							)}
-							<p className={styles.commentBody}>{comment.description || ''}</p>
-							<div className={styles.commentActions}>
-								<button
-									type="button"
-									className={styles.replyButton}
-									onClick={() => handleReplyClick(comment.id, comment.userName || 'Anonymous')}
-								>
-									Reply
-								</button>
-							</div>
-						</article>
+						<CommentItem
+							key={comment.id}
+							comment={comment}
+							isEditing={editingCommentId === comment.id}
+							editingText={editingCommentText}
+							canEdit={comment.userId === CURRENT_USER_ID}
+							onEditingTextChange={setEditingCommentText}
+							onReply={handleReplyClick}
+							onStartEdit={startEditComment}
+							onCancelEdit={cancelEditComment}
+							onSaveEdit={saveEditComment}
+							onDelete={handleDeleteComment}
+						/>
 					))}
 				</div>
 			</section>
