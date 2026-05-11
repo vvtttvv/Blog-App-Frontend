@@ -1,3 +1,4 @@
+import { type SyntheticEvent } from 'react'
 import styles from '../../../styles/post-page.module.css'
 
 interface EditPostFormProps {
@@ -6,7 +7,7 @@ interface EditPostFormProps {
   description: string
   onTitleChange: (value: string) => void
   onDescriptionChange: (value: string) => void
-  onSubmit: (event: React.SyntheticEvent<HTMLFormElement>) => void
+  onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void
   onCancel: () => void
 }
 

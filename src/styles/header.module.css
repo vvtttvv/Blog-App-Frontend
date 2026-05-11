@@ -113,6 +113,28 @@
   gap: 12px;
 }
 
+.authTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.authTab,
+.authTabActive {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.authTabActive {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
 .error {
   color: #ef4444;
   font-size: 14px;

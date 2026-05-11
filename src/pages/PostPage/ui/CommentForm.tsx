@@ -1,3 +1,4 @@
+import { type SyntheticEvent } from 'react'
 import styles from '../../../styles/post-page.module.css'
 
 interface CommentFormProps {
@@ -7,7 +8,7 @@ interface CommentFormProps {
   error: string | null
   submitting: boolean
   onChange: (value: string) => void
-  onSubmit: (event: React.SyntheticEvent<HTMLFormElement>) => void
+  onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void
   onCancel: () => void
 }
 
