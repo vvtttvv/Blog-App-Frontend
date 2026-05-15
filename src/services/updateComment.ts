@@ -1,4 +1,5 @@
 import type { Comment } from '../types/commentType'
+import apiFetch from './api'
 
 export interface UpdateCommentRequest {
   description?: string
@@ -9,7 +10,7 @@ export interface UpdateCommentRequest {
 
 export async function updateComment(id: string, request: UpdateCommentRequest): Promise<Comment | null> {
   try {
-    const res = await fetch(`http://localhost:5267/api/comments/${id}`, {
+    const res = await apiFetch(`/comments/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(request),

@@ -1,4 +1,5 @@
 import type { Post } from "../types/postType"
+import apiFetch from './api'
 
 interface PostsListResponse {
   items: Post[]
@@ -10,7 +11,7 @@ interface PostsListResponse {
 }
 
 export async function fetchPosts(): Promise<Post[]> {
-  const res = await fetch('http://localhost:5267/api/posts')
+  const res = await apiFetch('/posts')
   if (!res.ok) {
     throw new Error(`Failed to fetch posts: ${res.status} ${res.statusText}`)
   }

@@ -1,4 +1,5 @@
 import type { Post } from '../types/postType'
+import apiFetch from './api'
 
 export interface CreatePostRequest {
   title: string
@@ -8,11 +9,9 @@ export interface CreatePostRequest {
 
 export async function createPost(request: CreatePostRequest): Promise<Post | null> {
   try {
-    const res = await fetch('http://localhost:5267/api/posts', {
+    const res = await apiFetch('/posts', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
     })
 

@@ -6,9 +6,11 @@ export interface UpdatePostRequest {
   userId?: string
 }
 
+import apiFetch from './api'
+
 export async function updatePost(id: string, request: UpdatePostRequest): Promise<Post | null> {
   try {
-    const res = await fetch(`http://localhost:5267/api/posts/${id}`, {
+    const res = await apiFetch(`/posts/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(request),

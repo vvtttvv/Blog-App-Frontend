@@ -1,8 +1,9 @@
 import type { User } from '../types/userType'
+import apiFetch from './api'
 
 export async function fetchUserByUserName(userName: string): Promise<User | null> {
   try {
-    const res = await fetch(`http://localhost:5267/api/users/by-username/${encodeURIComponent(userName)}`, {
+    const res = await apiFetch(`/users/by-username/${encodeURIComponent(userName)}`, {
       headers: { Accept: 'application/json' },
     })
     if (!res.ok) return null

@@ -1,8 +1,9 @@
 import type { User } from "../types/userType"
+import apiFetch from './api'
 
 export async function fetchUser(userId: string): Promise<User | null> {
   try {
-    const res = await fetch(`http://localhost:5267/api/users/${userId}`)
+    const res = await apiFetch(`/users/${userId}`)
     if (!res.ok) return null
     const data = await res.json()
     if (data && typeof data === 'object' && 'id' in data) {

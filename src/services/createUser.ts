@@ -1,4 +1,5 @@
 import type { User } from '../types/userType'
+import apiFetch from './api'
 
 export interface CreateUserRequest {
   userName: string
@@ -9,7 +10,7 @@ export interface CreateUserRequest {
 
 export async function createUser(request: CreateUserRequest): Promise<User | null> {
   try {
-    const res = await fetch('http://localhost:5267/api/users', {
+    const res = await apiFetch('/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(request),

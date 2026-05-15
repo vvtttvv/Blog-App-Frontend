@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { clearTokens } from '../services/api'
 import type { User } from '../types/userType'
 
 interface AuthContextValue {
@@ -13,6 +14,7 @@ const STORAGE_KEY = 'blogapp_user'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<User | null>(null)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -23,7 +25,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem(STORAGE_KEY)
       }
     }
+    setInitialized(true)
   }, [])
+
+  useEffect(() => {
+    if (initialized && !user) {
+      clearTokens()
+    }
+  }, [user, initialized])
 
   const setUser = (next: User | null) => {
     setUserState(next)

@@ -1,5 +1,6 @@
 import type { Comment } from "../types/commentType"
 import type { Post } from "../types/postType"
+import apiFetch from './api'
 
 interface PostWithCommentsResponse {
   post: Post
@@ -8,7 +9,7 @@ interface PostWithCommentsResponse {
 
 export async function fetchComments(postId: string): Promise<Comment[]> {
   try {
-    const res = await fetch(`http://localhost:5267/api/posts/${postId}/with-comments`)
+    const res = await apiFetch(`/posts/${postId}/with-comments`)
     if (!res.ok) return []
     const data: PostWithCommentsResponse = await res.json()
     return data.comments ?? []

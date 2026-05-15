@@ -1,4 +1,5 @@
 import type { Comment } from '../types/commentType'
+import apiFetch from './api'
 
 export interface CreateCommentRequest {
   description: string
@@ -9,20 +10,16 @@ export interface CreateCommentRequest {
 
 export async function createComment(request: CreateCommentRequest): Promise<Comment | null> {
   try {
-    const res = await fetch('http://localhost:5267/api/comments', {
+    const res = await apiFetch('/comments', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
     })
 
     if (!res.ok) return null
 
     const data = await res.json()
-    if (data && typeof data === 'object' && 'id' in data) {
-      return data as Comment
-    }
+    if (data && typeof data === 'object' && 'id' in data) return data as Comment
 
     return null
   } catch (error) {
